@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>THE EARTH REMEMBERS</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%2318231d' stroke='%23d9c08a' stroke-width='2'/%3E%3Cpath d='M32 50V26M32 34c-8-2-12-8-10-16 7 1 12 6 10 16zm0-4c8-2 13-7 11-16-7 1-12 6-11 16z' fill='%2388b057' stroke='%23e8d8b0' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <canvas id="world-canvas" aria-label="The Earth Remembers interactive 3D landscape"></canvas>
+
+    <!-- Atmospheric vignette -->
+    <div class="vignette" aria-hidden="true"></div>
+
+    <!-- Opening Title Overlay (live 3D world breathes behind it) -->
+    <section id="intro-overlay" class="intro-overlay">
+      <div class="intro-content">
+        <p class="intro-eyebrow">An Interactive Living Landscape</p>
+        <h1 class="intro-title">THE EARTH REMEMBERS</h1>
+        <p class="intro-subtitle">Between what was broken, and what waits to return.</p>
+        <button id="enter-btn" class="enter-btn" type="button">
+          <span>Enter the World</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Minimal Exploration HUD -->
+    <header id="top-brand" class="top-brand hidden-hud">
+      <span class="brand-title">THE EARTH REMEMBERS</span>
+      <span id="vista-caption" class="vista-caption">The Ancient Heart</span>
+    </header>
+
+    <nav id="hud-bar" class="hud-bar hidden-hud" aria-label="World Navigation">
+      <div class="vista-group" id="vista-buttons" role="group" aria-label="Viewpoints"></div>
+
+      <span class="hud-divider" aria-hidden="true"></span>
+
+      <button id="mode-btn" class="hud-btn" type="button" title="Switch between Aerial and Ground perspective (G)">
+        <span class="mode-dot" aria-hidden="true"></span>
+        <span id="mode-label">Aerial</span>
+      </button>
+
+      <button id="reset-btn" class="hud-icon-btn hidden" type="button" title="Reset Restoration (R)" aria-label="Reset Restoration">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+          <path d="M3 3v5h5" />
+        </svg>
+      </button>
+
+      <button id="sound-btn" class="hud-icon-btn" type="button" title="Toggle Ambient Sound (M)" aria-label="Toggle Ambient Sound">
+        <svg id="sound-on-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 5L6 9H2v6h4l5 4V5z" />
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+        </svg>
+        <svg id="sound-off-icon" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 5L6 9H2v6h4l5 4V5z" />
+          <line x1="23" y1="9" x2="17" y2="15" />
+          <line x1="17" y1="9" x2="23" y2="15" />
+        </svg>
+      </button>
+    </nav>
+
+    <div id="controls-whisper" class="controls-whisper hidden-hud">
+      Click damaged ground to restore &middot; Drag to explore &middot; Scroll to zoom &middot; WASD to move &middot; G ground/aerial &middot; R reset &middot; H hide UI
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

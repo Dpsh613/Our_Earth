@@ -1,0 +1,333 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #14191f;
+  color: #f2ede3;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+#world-canvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  cursor: grab;
+  touch-action: none;
+}
+
+#world-canvas:active {
+  cursor: grabbing;
+}
+
+#world-canvas.can-restore {
+  cursor: pointer;
+}
+
+.vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0) 56%,
+    rgba(8, 11, 15, 0.36) 100%
+  );
+  z-index: 2;
+}
+
+/* Opening Title Screen */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+    circle at 50% 48%,
+    rgba(13, 18, 22, 0.32) 0%,
+    rgba(10, 14, 18, 0.72) 100%
+  );
+  backdrop-filter: blur(2px);
+  transition: opacity 1.5s cubic-bezier(0.22, 1, 0.36, 1), visibility 1.5s ease;
+}
+
+.intro-overlay.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.intro-content {
+  text-align: center;
+  padding: 2rem;
+  max-width: 720px;
+  animation: introRise 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes introRise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.intro-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgba(235, 222, 196, 0.76);
+  margin-bottom: 1.15rem;
+}
+
+.intro-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(2.5rem, 6vw, 4.7rem);
+  letter-spacing: 0.18em;
+  line-height: 1.08;
+  color: #f7f2e7;
+  text-shadow: 0 6px 36px rgba(0, 0, 0, 0.55);
+  margin-bottom: 1.1rem;
+}
+
+.intro-subtitle {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.1rem, 2.1vw, 1.42rem);
+  letter-spacing: 0.03em;
+  color: rgba(242, 235, 222, 0.85);
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+  margin-bottom: 2.6rem;
+}
+
+.enter-btn {
+  appearance: none;
+  border: 1px solid rgba(240, 226, 198, 0.42);
+  background: rgba(16, 22, 26, 0.42);
+  color: #f7f1e4;
+  padding: 0.88rem 2.4rem;
+  border-radius: 999px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.enter-btn:hover {
+  background: rgba(238, 215, 172, 0.18);
+  border-color: rgba(246, 228, 192, 0.78);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.36);
+}
+
+/* Minimal In-World HUD */
+.hidden-hud {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.top-brand {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.8rem;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 0.24rem;
+  pointer-events: none;
+  opacity: 0.78;
+  transition: opacity 0.8s ease;
+}
+
+.brand-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.02rem;
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  color: rgba(247, 242, 232, 0.88);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+}
+
+.vista-caption {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 0.94rem;
+  color: rgba(235, 223, 200, 0.72);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
+}
+
+.hud-bar {
+  position: fixed;
+  bottom: 2.35rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.42rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(14, 19, 24, 0.44);
+  border: 1px solid rgba(242, 233, 214, 0.14);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.28);
+  opacity: 0.72;
+  transition: opacity 0.45s ease, background 0.35s ease;
+}
+
+.hud-bar:hover {
+  opacity: 1;
+  background: rgba(14, 19, 24, 0.62);
+}
+
+.vista-group {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.vista-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: rgba(240, 233, 220, 0.68);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  padding: 0.42rem 0.72rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.28s ease;
+  white-space: nowrap;
+}
+
+.vista-btn:hover {
+  color: #f8f3e9;
+  background: rgba(255, 248, 234, 0.1);
+}
+
+.vista-btn.active {
+  color: #fff8eb;
+  background: rgba(232, 206, 154, 0.22);
+  box-shadow: inset 0 0 0 1px rgba(242, 220, 174, 0.32);
+}
+
+.hud-divider {
+  width: 1px;
+  height: 16px;
+  background: rgba(242, 233, 214, 0.18);
+  margin: 0 0.22rem;
+}
+
+.hud-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: rgba(244, 237, 224, 0.82);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.42rem 0.72rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.28s ease;
+}
+
+.hud-btn:hover {
+  background: rgba(255, 248, 234, 0.11);
+  color: #fff;
+}
+
+.mode-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d8c28c;
+  box-shadow: 0 0 8px rgba(216, 194, 140, 0.7);
+  transition: background 0.3s ease;
+}
+
+.hud-btn.ground-active .mode-dot {
+  background: #8cc97b;
+  box-shadow: 0 0 8px rgba(140, 201, 123, 0.7);
+}
+
+.hud-icon-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: rgba(244, 237, 224, 0.78);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.hud-icon-btn:hover {
+  background: rgba(255, 248, 234, 0.12);
+  color: #fff;
+}
+
+.hud-icon-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.hidden {
+  display: none;
+}
+
+.controls-whisper {
+  position: fixed;
+  bottom: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  font-size: 0.67rem;
+  letter-spacing: 0.11em;
+  color: rgba(235, 228, 214, 0.46);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+  white-space: nowrap;
+  transition: opacity 0.8s ease;
+}
+
+@media (max-width: 820px) {
+  .vista-btn {
+    padding: 0.36rem 0.52rem;
+    font-size: 0.64rem;
+  }
+  .controls-whisper {
+    display: none;
+  }
+}
